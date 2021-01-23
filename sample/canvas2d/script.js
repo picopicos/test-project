@@ -18,18 +18,8 @@ function initialize(){
 
 // 描画関数の定義
 function render(){
-    ctx.fillStyle = '#000000';
-
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawRect(10,10,30,30,'#765');
-    drawLine(100, 100, 200, 200, '#ff0000');
-    let points = [
-        100, 100,
-        300, 100,
-        100, 300,
-        300, 300,
-    ];
-    drawPolygon(points, '#ff0000');
+    drawQuadraticbezier(100, 100, 200, 200, 100, 200, '#333333');
+    drawCubicBezier(100, 100, 200, 200, 150, 100, 200, 150, '#333333');
 }
 
 // 短形を描画する関数
@@ -69,6 +59,60 @@ function drawPolygon(points, color){
     }
     ctx.closePath();
     ctx.fill();
+}
+
+// ランダムな整数の値を生成する関数
+function generateRandomInt(range){
+    let random = Math.random();
+    return Math.floor(random * range);
+}
+
+// 円を描画する関数
+function drawCircle(x, y, radius, color){
+    if(color != null){
+        ctx.fillStyle = color;
+    }
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0.0, Math.PI * 2.0);
+    ctx.closePath();
+    ctx.fill();
+}
+
+// 扇を描画する関数
+function drawFan(x, y, radius, startRadian, endRadian, color){
+    if(color != null){
+        ctx.fillStyle = color;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.arc(x, y, radius, startRadian, endRadian);
+    ctx.closePath();
+    ctx.fill();
+
+}
+
+// 2次ベジェ曲線を描画する関数
+function drawQuadraticbezier(x1, y1, x2, y2, cx, cy, color, width = 1){
+    if(color != null){
+        ctx.strokeStyle = color;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.quadraticCurveTo(cx, cy, x2, y2);
+    ctx.closePath();
+    ctx.stroke();
+}
+
+// 3次ベジェ曲線を描画する関数
+function drawCubicBezier(x1, y1, x2, y2, cx1, cy1, cx2, cy2, color, width = 1){
+    if(color !== null){
+        ctx.strokeStyle = color;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.bezierCurveTo(cx1, cy1, cx2, cy2, x2, y2);
+    ctx.closePath();
+    ctx.stroke();
 }
 
 })();
