@@ -1,11 +1,16 @@
 (() => {[]
 let canvas = null;
 let ctx = null;
+let image = null;
 
 // ページのロード完了時に発火するloadイベント]
 window.addEventListener('load', () => {
-    initialize();
-    render();
+    imageLoader('sample/canvas2d/image/image.jpg', (loadedImage) => {
+        // グローバル変数にロードによって受け取った画像を渡す
+        image = loadedImage;
+        initialize();
+        render();
+    });
 }, false);
 
 // 初期化関数の定義
@@ -18,9 +23,13 @@ function initialize(){
 
 // 描画関数の定義
 function render(){
-    drawQuadraticbezier(100, 100, 200, 200, 100, 200, '#333333');
-    drawCubicBezier(100, 100, 200, 200, 150, 100, 200, 150, '#333333');
+    ctx.drawImage(image, 100, 100);
+    drawText('hello!', 50, 50, '#ffffff');
 }
+
+/* ==============================
+ *     ユーザー定義関数
+ * ============================== */
 
 // 短形を描画する関数
 function drawRect(x, y, width, height, color){
@@ -113,6 +122,28 @@ function drawCubicBezier(x1, y1, x2, y2, cx1, cy1, cx2, cy2, color, width = 1){
     ctx.bezierCurveTo(cx1, cy1, cx2, cy2, x2, y2);
     ctx.closePath();
     ctx.stroke();
+}
+
+// テキストを描画する関数
+function drawText(text, x, y, color, width){
+    if(color != null){
+        ctx.fillStyle = color;
+    }
+    ctx.fillText(text, x, y, width);
+}
+
+
+
+// 画像をロードしてからコールバック関数（初期化と描画）を実行する関数
+function imageLoader(path, callback){
+    let target = new Image();
+    target.addEventListener('load', () => {
+        if(callback != null){
+            // コールバック関数にロードした画像を渡す
+            callback(target);
+        }
+    }, false);
+    target.src = path;
 }
 
 })();
